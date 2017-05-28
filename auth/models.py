@@ -1,4 +1,4 @@
-from ..oa import db
+from oa import db
 import datetime
 
 

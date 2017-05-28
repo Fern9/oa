@@ -8,4 +8,4 @@ db = MongoEngine(app)
 app.register_blueprint(blue_auth, url_prefix='/auth')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

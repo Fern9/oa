@@ -7,7 +7,7 @@ from . import auth
 def register():
     user = User(title='test_title')
     user.save()
-
+    return 'success'
 
 @auth.route('/test')
 def test():
