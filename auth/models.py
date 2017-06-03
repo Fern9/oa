@@ -29,16 +29,15 @@ class Permission(Enum):
     AUTH_ROLE = 4  # 更改用户角色
 
 
-@staticmethod
 def init_roles():
     for role in Role.objects.all():
         role.delete()
-    common = Role(name="普通用户", permission=[Permission.APPLY_REQUIRE.value], default=True)
-    repairer = Role(name="维修人员", permission=[Permission.APPLY_REQUIRE.value, Permission.EDIT_REPIRE_FORM.value],
+    common = Role(name="normal", permission=[Permission.APPLY_REQUIRE.value], default=True)
+    repairer = Role(name="repair", permission=[Permission.APPLY_REQUIRE.value, Permission.EDIT_REPIRE_FORM.value],
                     default=False)
-    admin = Role(name="管理员", permission=[Permission.APPLY_REQUIRE.value, Permission.EDIT_REPIRE_FORM.value,
-                                         Permission.AUTH_ROLE.value,
-                                         Permission.MANAGE_USER.value], default=False)
+    admin = Role(name="admin", permission=[Permission.APPLY_REQUIRE.value, Permission.EDIT_REPIRE_FORM.value,
+                                           Permission.AUTH_ROLE.value,
+                                           Permission.MANAGE_USER.value], default=False)
     common.save()
     repairer.save()
     admin.save()
