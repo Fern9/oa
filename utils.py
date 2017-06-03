@@ -16,7 +16,7 @@ def init_object_from_dict(object, dict):
             setattr(object, key, dict[key])
         else:
             return {'code': Status.failed.value, 'message': 'parameter include invalid attribute: ' + key}
-        return {'code': Status.ok.value, 'message': 'ok', 'data': object}
+    return {'code': Status.ok.value, 'message': 'ok', 'data': object}
 
 
 class Status(Enum):
