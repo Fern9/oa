@@ -1,21 +1,24 @@
 import flask
+from flask import request
 from mongoengine import ValidationError
 
 from .models import User, Role
 from . import auth
+from utils import init_object_from_dict
 
 
-@auth.route('/user', methods=['PUT'])
+@auth.route('/user', methods=['POST'])
 def register():
-    role = Role.objects(default=True).first()
-    print(role)
-    wx_user = {'id': '01', 'name': '陈宇航'}
-    user = User(wx_user=wx_user, name='陈酱', role=role)
+    user = User()
+    user = init_object_from_dict(user, request.json)
+
+    if user is None:
+        return [code]
+
     try:
         user.save()
     except ValidationError as e:
-        return e.message
-
+        return str(e.message)
     return 'success'
 
 
@@ -23,5 +26,3 @@ def register():
 def test():
     print(User.objects(name='陈酱').first().role.name)
     return 'hello world'
-
-
