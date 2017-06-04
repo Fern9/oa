@@ -1,12 +1,9 @@
 # coding=utf-8
 import json
-
 from flask import request
-
 from procedures.user_procedure import UserProcedure
 from utils.display_helper import Status, DisplayHelper
 from . import auth
-from .models import init_roles
 
 
 @auth.route('/user', methods=['POST'])
@@ -46,7 +43,13 @@ def user_get():
     return DisplayHelper.output(code, msg, data)
 
 
+@auth.route('login', methods=['POST'])
+def wx_login():
+    content = request.json
+
+
 @auth.route('/test')
 def test():
-    init_roles()
     return 'hello world'
+
+

@@ -9,7 +9,8 @@ def main():
 
     pc = WXBizDataCrypt(appId, sessionKey)
 
-    print pc.decrypt(encryptedData, iv)
+    print(pc.decrypt(encryptedData, iv))
+
 
 if __name__ == '__main__':
     main()

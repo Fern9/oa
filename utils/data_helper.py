@@ -4,19 +4,19 @@ from utils.display_helper import Status
 
 class DataHelper:
     @classmethod
-    def init_object_from_dict(cls, object, dict):
+    def init_object_from_dict(cls, obj, attr):
         """将dict中的值初始化到object中
 
-        dict中包含多余的（object没有的属性）将返回错误
-        :param object:  待初始化的对象
-        :param dict:
+        :param obj:  待初始化的对象
+        :param attr:  属性字典
         :return: {code, message, data}
         """
         if object is None:
             return Status.failed, u'None exception', None
-        for key in dict:
-            if hasattr(object, key):
-                setattr(object, key, dict[key])
+        for key in attr:
+            if hasattr(obj, key):
+                setattr(obj, key, attr[key])
             else:
-                return Status.failed, u'parameter include invalid attribute: ' + key, None
-        return Status.ok, u'ok', object
+                pass
+                # return Status.failed, u'parameter include invalid attribute: ' + key, None
+        return Status.ok, u'ok', obj
