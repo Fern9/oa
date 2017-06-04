@@ -1,3 +1,4 @@
+# coding=utf-8
 from oa import db
 import datetime
 from enum import Enum, unique

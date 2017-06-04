@@ -1,24 +1,32 @@
-from auth.models import User
+# coding=utf-8
+from mongoengine import ValidationError
+
+from auth.models import User, Role
+from utils.data_helper import DataHelper
+from utils.display_helper import Status
 
 
 class UserProcedure:
     @classmethod
-    def user_register(cls):
+    def user_register(cls, content):
+        """
+        :param content:
+        :return:  procedure 函数返回值都统一用三个参数：code,msg,data
+        """
         user = User()
-        result = init_object_from_dict(user, request.json)
-        if result['code'] != Status.ok.value:
-            return json.dumps(result)
+        code, msg, data = DataHelper.init_object_from_dict(user, content)
+        if code != Status.ok:
+            return code, msg, data
         try:
-            user = result['data']
-            if 'role' in request.json:
-                role = Role.objects(name=request.json['role']).first()
+            user = data
+            if 'role' in content:
+                role = Role.objects(name=content['role']).first()
                 if role is None:
-                    return json.dumps(
-                        {'code': Status.failed.value, 'message': 'can not find Role: ' + request.json['role']})
+                    return Status.failed, u'can not find Role: ' + content['role'], None
             else:
                 role = Role.objects(default=True).first()
             user.role = role
             user.save()
         except ValidationError as e:
-            return json.dumps({'code': Status.failed.value, 'message': e.message})
-        return json.dumps({'code': Status.ok.value, 'message': 'ok'})
+            return Status.failed, e.message, None
+        return Status.ok, u'ok', None

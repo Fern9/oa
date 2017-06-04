@@ -13,10 +13,10 @@ class DataHelper:
         :return: {code, message, data}
         """
         if object is None:
-            return {'code': Status.failed.value, 'message': 'None exception'}
+            return Status.failed, u'None exception', None
         for key in dict:
             if hasattr(object, key):
                 setattr(object, key, dict[key])
             else:
-                return {'code': Status.failed.value, 'message': 'parameter include invalid attribute: ' + key}
-        return {'code': Status.ok.value, 'message': 'ok', 'data': object}
+                return Status.failed, u'parameter include invalid attribute: ' + key, None
+        return Status.ok, u'ok', object
