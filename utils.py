@@ -21,6 +21,9 @@ def init_object_from_dict(object, dict):
 
 class Status(Enum):
     ok = 200  # 成功
+    create = 201  # 创建成功
+    delete = 204  # 删除
     failed = 400  # 失败
+    unauth = 401  # 未授权的
     not_found = 404  # 资源未找到
     forbidden = 403  # 没有权限
