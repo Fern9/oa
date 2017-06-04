@@ -20,7 +20,7 @@ def init_object_from_dict(object, dict):
 
 
 class Status(Enum):
-    ok = 7200  # 成功
-    failed = 7400  # 失败
-    not_found = 7404  # 资源未找到
-    forbidden = 7403  # 没有权限
+    ok = 200  # 成功
+    failed = 400  # 失败
+    not_found = 404  # 资源未找到
+    forbidden = 403  # 没有权限

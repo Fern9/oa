@@ -4,7 +4,7 @@ from enum import Enum, unique
 
 
 class User(db.Document):
-    wx_user = db.DictField(required=True)  # 用户微信信息
+    wx_user = db.DictField(required=True)  # 用户微信信息,必须
     name = db.StringField()  # 姓名
     phone = db.StringField()  # 联系电话
     address = db.StringField()  # 地址
@@ -17,7 +17,7 @@ class User(db.Document):
 
 
 class Role(db.Document):
-    name = db.StringField(unique=True)  # 角色名,唯一
+    name = db.StringField(unique=True, required=True)  # 角色名,唯一
     permission = db.ListField()  # 权限列表
     default = db.BooleanField()  # 是否为默认角色,默认角色为普通用户
 
