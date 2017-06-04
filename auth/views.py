@@ -1,31 +1,49 @@
-import flask, json
+# coding=utf-8
+import json
+
 from flask import request
-from mongoengine import ValidationError
-from .models import User, Role, init_roles
+
+from procedures.user_procedure import UserProcedure
+from utils.display_helper import Status, DisplayHelper
 from . import auth
-from utils import init_object_from_dict, Status
+from .models import init_roles
 
 
 @auth.route('/user', methods=['POST'])
-def register():
-    user = User()
-    result = init_object_from_dict(user, request.json)
-    if result['code'] != Status.ok.value:
-        return json.dumps(result)
-    try:
-        user = result['data']
-        if 'role' in request.json:
-            role = Role.objects(name=request.json['role']).first()
-            if role is None:
-                return json.dumps(
-                    {'code': Status.failed.value, 'message': 'can not find Role: ' + request.json['role']})
-        else:
-            role = Role.objects(default=True).first()
-        user.role = role
-        user.save()
-    except ValidationError as e:
-        return json.dumps({'code': Status.failed.value, 'message': e.message})
-    return json.dumps({'code': Status.create.value, 'message': 'ok'})
+def user():
+    """
+    action == register:注册
+    action == login:登录
+    ...
+    """
+    content = request.json
+    action = content['action']
+    if action == "register":
+        code, msg, data = UserProcedure.user_register(content)
+    else:
+        code = Status.failed
+        msg = u'无此 action'
+        data = None
+    return DisplayHelper.output(code, msg, data)
+
+
+@auth.route('/user', methods=['GET'])
+def user_get():
+    """
+    view == get_curr_user_info:获取用户信息
+    view ==  xxx:获取用户 xxx
+    :return:
+    """
+    params = request.args
+    view = params['view']
+    if view == "get_curr_user_info":
+        # code, msg, data = UserProcedure.get_user_info(user_id=xxx)
+        pass
+    else:
+        code = Status.failed
+        msg = u'无此 action'
+        data = None
+    return DisplayHelper.output(code, msg, data)
 
 
 @auth.route('/test')
