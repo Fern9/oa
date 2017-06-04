@@ -25,7 +25,7 @@ def register():
         user.save()
     except ValidationError as e:
         return json.dumps({'code': Status.failed.value, 'message': e.message})
-    return json.dumps({'code': Status.ok.value, 'message': 'ok'})
+    return json.dumps({'code': Status.create.value, 'message': 'ok'})
 
 
 @auth.route('/test')
