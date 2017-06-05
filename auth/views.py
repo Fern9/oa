@@ -2,6 +2,7 @@
 import json
 from flask import request
 from procedures.user_procedure import UserProcedure
+from procedures.login_procedure import LoginProcedure
 from utils.display_helper import Status, DisplayHelper
 from . import auth
 
@@ -46,6 +47,8 @@ def user_get():
 @auth.route('login', methods=['POST'])
 def wx_login():
     content = request.json
+    code, msg, data = LoginProcedure.login(content)
+    return DisplayHelper(code, msg, data)
 
 
 @auth.route('/test')

@@ -5,7 +5,8 @@ from enum import Enum, unique
 
 
 class User(db.Document):
-    wx_user = db.DictField(required=True)  # 用户微信信息,必须
+    wx_userinfo = db.DictField()  # 用户微信信息
+    wx_open_id = db.StringField(required=True)
     name = db.StringField()  # 姓名
     phone = db.StringField()  # 联系电话
     address = db.StringField()  # 地址
