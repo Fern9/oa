@@ -33,12 +33,12 @@ class Permission():
 def init_roles():
     for role in Role.objects.all():
         role.delete()
-    common = Role(name="normal", permission=[Permission.APPLY_REQUIRE.value], default=True)
-    repairer = Role(name="repair", permission=[Permission.APPLY_REQUIRE.value, Permission.EDIT_REPIRE_FORM.value],
+    common = Role(name="normal", permission=[Permission.APPLY_REQUIRE], default=True)
+    repairer = Role(name="repair", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPIRE_FORM],
                     default=False)
-    admin = Role(name="admin", permission=[Permission.APPLY_REQUIRE.value, Permission.EDIT_REPIRE_FORM.value,
-                                           Permission.AUTH_ROLE.value,
-                                           Permission.MANAGE_USER.value], default=False)
+    admin = Role(name="admin", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPIRE_FORM,
+                                           Permission.AUTH_ROLE,
+                                           Permission.MANAGE_USER], default=False)
     common.save()
     repairer.save()
     admin.save()

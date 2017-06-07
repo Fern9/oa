@@ -36,12 +36,12 @@ class LoginProcedure:
         iv = content['iv']
         session_key, open_id = cls.get_open_id(code)
         if session_key is None or open_id is None:
-            return Status.failed.value, u'get session key and openid failed', None
+            return Status.failed, u'get session key and openid failed', None
         wxbi = WXBizDataCrypt(appId=APPID, sessionKey=session_key)
         data = wxbi.decrypt(encryptedData, iv)
         data["session_key"] = session_key
         data['open_id'] = open_id
-        return Status.ok.value, u'ok', data
+        return Status.ok, u'ok', data
 
 
     @classmethod
@@ -55,22 +55,22 @@ class LoginProcedure:
         :return: login status
         """
         code, msg, data = cls.get_login_data(content)
-        if code != Status.ok.value:
+        if code != Status.ok:
             return code, msg, None
         user = User.objects(wx_open_id=data['open_id']).first()
         if user is None:
             # UserProcedure.user_register(content)
-            return Status.not_found.value, u'user not found', None
+            return Status.not_found, u'user not found', None
         # user = User.objects(wx_open_id=data['open_id']).first()
         login_user(user, remember=True)
         session['session_key'] = data['session_key']
         session['open_id'] = data['open_id']
-        return Status.ok.value, u'ok', None
+        return Status.ok, u'ok', None
 
     @classmethod
     def logout(cls):
         logout_user()
-        return Status.ok.value, u'ok', None
+        return Status.ok, u'ok', None
 
 
 @login_manager.user_loader
