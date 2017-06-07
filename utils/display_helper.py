@@ -1,9 +1,7 @@
 # coding=utf-8
 import json
-from enum import Enum
 
-
-class Status(Enum):
+class Status():
     ok = 200  # 成功
     failed = 400  # 失败
     unauth = 401  # 未授权

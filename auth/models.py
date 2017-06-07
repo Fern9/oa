@@ -1,7 +1,6 @@
 # coding=utf-8
 from oa import db
 import datetime
-from enum import Enum, unique
 
 
 class User(db.Document):
@@ -24,8 +23,7 @@ class Role(db.Document):
     default = db.BooleanField()  # 是否为默认角色,默认角色为普通用户
 
 
-@unique
-class Permission(Enum):
+class Permission():
     APPLY_REQUIRE = 1  # 申请维修
     EDIT_REPIRE_FORM = 2  # 编辑维修单
     MANAGE_USER = 3  # 用户管理
