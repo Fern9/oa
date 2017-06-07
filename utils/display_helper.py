@@ -3,11 +3,12 @@ import json
 from enum import Enum
 
 
-class Status:
-    ok = 7200  # 成功
-    failed = 7400  # 失败
-    not_found = 7404  # 资源未找到
-    forbidden = 7403  # 没有权限
+class Status(Enum):
+    ok = 200  # 成功
+    failed = 400  # 失败
+    unauth = 401  # 未授权
+    not_found = 404  # 资源未找到
+    forbidden = 403  # 没有权限
 
 
 class DisplayHelper:
@@ -18,3 +19,4 @@ class DisplayHelper:
             "msg": msg,
             "data": data
         })
+

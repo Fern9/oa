@@ -4,6 +4,7 @@ from mongoengine import ValidationError
 from auth.models import User, Role
 from utils.data_helper import DataHelper
 from utils.display_helper import Status
+from flask_login import current_user
 
 
 class UserProcedure:
@@ -30,3 +31,20 @@ class UserProcedure:
         except ValidationError as e:
             return Status.failed, e.message, None
         return Status.ok, u'ok', None
+
+    @classmethod
+    def get_curr_user_info(cls):
+        if current_user is None:
+            return Status.unauth.value, u'当前未登录', None
+        return Status.ok.value, u'ok', current_user
+
+    @classmethod
+    def get_user_info_by_openid(cls, openid):
+        user = User.objects(wx_open_id=openid)
+        if user is None:
+            return Status.not_found.value, u'not found user', None
+        return Status.ok.value, u'ok', user
+
+
+
+

@@ -35,8 +35,7 @@ def user_get():
     params = request.args
     view = params['view']
     if view == "get_curr_user_info":
-        # code, msg, data = UserProcedure.get_user_info(user_id=xxx)
-        pass
+        code, msg, data = UserProcedure.get_user_info()
     else:
         code = Status.failed
         msg = u'无此 action'
@@ -44,11 +43,11 @@ def user_get():
     return DisplayHelper.output(code, msg, data)
 
 
-@auth.route('login', methods=['POST'])
+@auth.route('/login', methods=['POST'])
 def wx_login():
     content = request.json
     code, msg, data = LoginProcedure.login(content)
-    return DisplayHelper(code, msg, data)
+    return DisplayHelper.output(code, msg, data)
 
 
 @auth.route('/test')
