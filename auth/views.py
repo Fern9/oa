@@ -1,6 +1,6 @@
 # coding=utf-8
-import json
 from flask import request
+
 from procedures.user_procedure import UserProcedure
 from procedures.login_procedure import LoginProcedure
 from utils.display_helper import Status, DisplayHelper

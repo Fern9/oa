@@ -1,12 +1,13 @@
 import json
+
 import requests
-from utils.WXBizDataCrypt import WXBizDataCrypt
-from flask_login import login_user, logout_user
-from oa import login_manager
-from auth.models import User
 from flask import session
+from flask_login import login_user, logout_user
+
+from models import User
+from oa import login_manager
+from utils.WXBizDataCrypt import WXBizDataCrypt
 from utils.data_helper import Status
-from .user_procedure import UserProcedure
 
 APPID = "wxe2bdfe83e46f876b"
 SECRET = "6d5622b5ea562540da116daaec9e6db0"

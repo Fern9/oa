@@ -1,10 +1,10 @@
 # coding=utf-8
+from flask_login import current_user
 from mongoengine import ValidationError
 
-from auth.models import User, Role
+from models import User, Role
 from utils.data_helper import DataHelper
 from utils.display_helper import Status
-from flask_login import current_user
 
 
 class UserProcedure:
