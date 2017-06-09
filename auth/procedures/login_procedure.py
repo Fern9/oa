@@ -1,4 +1,5 @@
 import json
+import sys
 
 import requests
 from flask import session
@@ -13,7 +14,6 @@ APPID = "wxe2bdfe83e46f876b"
 SECRET = "6d5622b5ea562540da116daaec9e6db0"
 
 wx_api_url = 'https://api.weixin.qq.com'
-
 
 class LoginProcedure:
     @classmethod
@@ -41,6 +41,7 @@ class LoginProcedure:
         data = wxbi.decrypt(encryptedData, iv)
         data["session_key"] = session_key
         data['open_id'] = open_id
+
         return Status.ok, u'ok', data
 
 
@@ -62,7 +63,7 @@ class LoginProcedure:
             # UserProcedure.user_register(content)
             return Status.not_found, u'user not found', None
         # user = User.objects(wx_open_id=data['open_id']).first()
-        login_user(user, remember=True)
+        login_user(user, remember=True, force=True)
         session['session_key'] = data['session_key']
         session['open_id'] = data['open_id']
         return Status.ok, u'ok', None
@@ -75,4 +76,4 @@ class LoginProcedure:
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.objects(_id=user_id).first()
+    return User.objects(wx_open_id=user_id).first()

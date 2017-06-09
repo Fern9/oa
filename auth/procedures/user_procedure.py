@@ -5,6 +5,9 @@ from mongoengine import ValidationError
 from models import User, Role
 from utils.data_helper import DataHelper
 from utils.display_helper import Status
+from login_procedure import LoginProcedure
+from bson import json_util
+
 
 
 class UserProcedure:
@@ -15,7 +18,12 @@ class UserProcedure:
         :return:  procedure 函数返回值都统一用三个参数：code,msg,data
         """
         user = User()
-        code, msg, data = DataHelper.init_object_from_dict(user, content)
+        code = content.get('code')
+        session_key, openid = LoginProcedure.get_open_id(code)
+        user.wx_open_id = openid
+        content.pop('code')
+        user.wx_userinfo = content.get('wx_userinfo')
+        code, msg, data = DataHelper.init_object_from_dict(user, content.get('userinfo'))
         if code != Status.ok:
             return code, msg, data
         try:
@@ -37,6 +45,11 @@ class UserProcedure:
         if current_user is None:
             return Status.unauth, u'当前未登录', None
         return Status.ok, u'ok', current_user
+
+    @classmethod
+    def get_all_user_info(cls):
+        users = User.objects.all()
+        return Status.ok, u'ok', users
 
     @classmethod
     def get_user_info_by_openid(cls, openid):

@@ -1,9 +1,11 @@
 # coding=utf-8
+from flask.ext.login import UserMixin
+
 from oa import db
 import datetime
 
 
-class User(db.Document):
+class User(db.Document, UserMixin):
     wx_userinfo = db.DictField()  # 用户微信信息
     wx_open_id = db.StringField(required=True)
     name = db.StringField()  # 姓名
@@ -15,6 +17,9 @@ class User(db.Document):
     register_time = db.DateTimeField(default=datetime.datetime.now)  # 注册时间
     edit_time = db.DateTimeField(default=datetime.datetime.now)  # 最后编辑时间
     role = db.ReferenceField('Role')
+
+    def get_id(self):
+        return self.wx_open_id
 
 
 class Role(db.Document):

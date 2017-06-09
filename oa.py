@@ -12,5 +12,8 @@ login_manager.init_app(app)
 app.register_blueprint(blue_auth, url_prefix='/auth')
 app.session_interface = MongoEngineSessionInterface(db)
 
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+

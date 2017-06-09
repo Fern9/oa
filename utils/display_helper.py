@@ -1,5 +1,7 @@
 # coding=utf-8
 import json
+from bson import json_util
+
 
 class Status():
     ok = 200  # 成功
@@ -18,3 +20,10 @@ class DisplayHelper:
             "data": data
         })
 
+    @classmethod
+    def mongo_output(cls, code=Status.ok, msg=u'', data=None):
+        return json_util.dumps({
+            "code": code,
+            "msg": msg,
+            "data": data
+        })
