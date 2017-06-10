@@ -5,3 +5,5 @@ MONGODB_SETTINGS = {
     'username': 'oa',
     'password': 'oa'
 }
+
+SECRET_KEY = 'you-will-never-guess'

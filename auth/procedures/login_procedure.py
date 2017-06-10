@@ -63,7 +63,7 @@ class LoginProcedure:
             # UserProcedure.user_register(content)
             return Status.not_found, u'user not found', None
         # user = User.objects(wx_open_id=data['open_id']).first()
-        login_user(user, remember=True, force=True)
+        login_user(user, remember=True)
         session['session_key'] = data['session_key']
         session['open_id'] = data['open_id']
         return Status.ok, u'ok', None
