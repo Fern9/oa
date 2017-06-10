@@ -9,7 +9,8 @@ db = MongoEngine(app)
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.init_app(app)
-app.register_blueprint(blue_auth, url_prefix='/auth')
+app.register_blueprint(blue_auth, url_prefix='/api')
+app.config['SECRET_KEY'] = 'you-will-never-guess'
 app.session_interface = MongoEngineSessionInterface(db)
 
 
