@@ -2,3 +2,4 @@ flask
 python
 flask-mongoengine
 pycrypto
+flask_login
