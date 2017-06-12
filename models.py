@@ -48,14 +48,14 @@ class ProcessDefine(db.Document):
     define_name = db.StringField()
     description = db.StringField()
     form_name = db.StringField()
-    activities = db.SortedListField()
+    activities = db.SortedListField(db.EmbeddedDocumentField('ActivityDefine'), odering='sequence', reverse=True)
     state = db.IntField()
     create_time = db.DateTimeField()
     update_time = db.DateTimeField()
     definer = db.StringField()
 
 
-class ActivityDefine(db.Document):
+class ActivityDefine(db.EmbeddedDocument):
     define_name = db.StringField()
     description = db.StringField()
     sequence = db.IntField()
@@ -74,15 +74,16 @@ class ProcessInst(db.Document):
     description = db.StringField()
     form = db.DictField()
     state = db.IntField()
-    activities = db.SortedListField()
+    activities = db.SortedListField(db.EmbeddedDocumentField('ActivityInst'), odering='sequence', reverse=True)
     creator = db.ReferenceField('User')
     start_time = db.DateTimeField()
     end_time = db.DateTimeField()
 
 
-class ActivityInst(db.Document):
+class ActivityInst(db.EmbeddedDocument):
     inst_name = db.StringField()
     activity_define = db.ReferenceField('ActivityDefine')
+    sequence = db.IntField()
     participants = db.ListField()
     state = db.IntField()
     start_time = db.DateTimeField()
