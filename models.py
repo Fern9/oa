@@ -35,15 +35,55 @@ class Permission():
     AUTH_ROLE = 4  # 更改用户角色
 
 
-def init_roles():
-    for role in Role.objects.all():
-        role.delete()
-    common = Role(name="normal", permission=[Permission.APPLY_REQUIRE], default=True)
-    repairer = Role(name="repair", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPIRE_FORM],
-                    default=False)
-    admin = Role(name="admin", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPIRE_FORM,
-                                           Permission.AUTH_ROLE,
-                                           Permission.MANAGE_USER], default=False)
-    common.save()
-    repairer.save()
-    admin.save()
+class RepairForm(db.Document):
+    apply_user = db.ReferenceField("User")
+    trouble_thing = db.StringField()
+    description = db.StringField()
+    address = db.StringField()
+    phone = db.StringField()
+    comment = db.StringField()
+
+
+class ProcessDefine(db.Document):
+    define_name = db.StringField()
+    description = db.StringField()
+    form_name = db.StringField()
+    activities = db.SortedListField()
+    state = db.IntField()
+    create_time = db.DateTimeField()
+    update_time = db.DateTimeField()
+    definer = db.StringField()
+
+
+class ActivityDefine(db.Document):
+    define_name = db.StringField()
+    description = db.StringField()
+    sequence = db.IntField()
+    participant = db.ListField()
+
+
+class Participant(object):
+    def __init__(self, type, value):
+        self.type = type
+        self.value = value
+
+
+class ProcessInst(db.Document):
+    inst_name = db.StringField()
+    process_define = db.ReferenceField('ProcessDefine')
+    description = db.StringField()
+    form = db.DictField()
+    state = db.IntField()
+    activities = db.SortedListField()
+    creator = db.ReferenceField('User')
+    start_time = db.DateTimeField()
+    end_time = db.DateTimeField()
+
+
+class ActivityInst(db.Document):
+    inst_name = db.StringField()
+    activity_define = db.ReferenceField('ActivityDefine')
+    participants = db.ListField()
+    state = db.IntField()
+    start_time = db.DateTimeField()
+    end_time = db.DateTimeField()

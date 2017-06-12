@@ -1,4 +1,5 @@
 # coding=utf-8
+from models import Role, Permission
 from utils.display_helper import Status
 
 
@@ -24,3 +25,20 @@ class DataHelper:
     @classmethod
     def mongoset_to_dict(cls, mongoset):
         return [ob.to_mongo().to_dict() for ob in mongoset]
+
+    @classmethod
+    def init_roles(cls):
+        """初始化角色信息
+        :return: no return
+        """
+        for role in Role.objects.all():
+            role.delete()
+        common = Role(name="normal", permission=[Permission.APPLY_REQUIRE], default=True)
+        repairer = Role(name="repair", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPIRE_FORM],
+                        default=False)
+        admin = Role(name="admin", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPIRE_FORM,
+                                               Permission.AUTH_ROLE,
+                                               Permission.MANAGE_USER], default=False)
+        common.save()
+        repairer.save()
+        admin.save()

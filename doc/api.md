@@ -1,5 +1,7 @@
 # api
 
+[TOC]
+
 ## user
 
 ### 注册
@@ -34,6 +36,37 @@ wx.request({
     }
 }
 ```
+
+
+
+#### userinfo详细
+
+| 名称      | 类型     | 备注                                       |
+| ------- | ------ | ---------------------------------------- |
+| name    | string | 姓名                                       |
+| phone   | string | 电话号码                                     |
+| address | string | 地址                                       |
+| company | string | 用户所在单位                                   |
+| age     | int    | 年龄                                       |
+| email   | string | 邮箱                                       |
+| role    | string | 可选[normal, repair, admin], 默认为normal，普通注册时一般不需要传role |
+
+
+
+### 用户信息修改
+
+uri: `/api/user`
+
+method: `POST`
+
+data:
+
+| 参数          | 格式     | 备注         |
+| ----------- | ------ | ---------- |
+| action      | string | update，必须  |
+| wx_userinfo | dict   | 微信用户信息     |
+| userinfo    | dict   | 用户信息       |
+| code        | string | wx.login得到 |
 
 
 
