@@ -1,9 +1,8 @@
 import json
-from flask import Blueprint
 from models import ProcessDefine
+from flask import Blueprint
 
 process = Blueprint('process', __name__)
-
 
 @process.route('/test')
 def test():

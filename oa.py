@@ -1,17 +1,16 @@
 from flask import Flask
-from flask_mongoengine import MongoEngine, MongoEngineSessionInterface
-from auth import auth as blue_auth
-from process.views import process as blue_process
-from flask_login import LoginManager
+from flask_mongoengine import MongoEngineSessionInterface
+from auth.views import auth as blue_auth
+from process.views import process
+from models import db
+from auth.procedures.login_procedure import login_manager
 
 app = Flask(__name__)
 app.config.from_object('config')
-db = MongoEngine(app)
-login_manager = LoginManager()
-login_manager.session_protection = 'strong'
-login_manager.init_app(app)
+db.init_app(app)
 app.register_blueprint(blue_auth, url_prefix='/api')
-app.register_blueprint(blue_process, url_prefix='/process')
+app.register_blueprint(process, url_prefix='/process')
+login_manager.init_app(app)
 
 app.session_interface = MongoEngineSessionInterface(db)
 

@@ -1,8 +1,10 @@
 # coding=utf-8
 from flask.ext.login import UserMixin
+from flask_mongoengine import MongoEngine
 
-from oa import db
 import datetime
+
+db = MongoEngine()
 
 
 class User(db.Document, UserMixin):

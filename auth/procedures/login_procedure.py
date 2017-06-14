@@ -6,7 +6,7 @@ from flask import session
 from flask_login import login_user, logout_user
 
 from models import User
-from oa import login_manager
+from flask_login import LoginManager
 from utils.WXBizDataCrypt import WXBizDataCrypt
 from utils.data_helper import Status
 
@@ -14,6 +14,10 @@ APPID = "wxe2bdfe83e46f876b"
 SECRET = "6d5622b5ea562540da116daaec9e6db0"
 
 wx_api_url = 'https://api.weixin.qq.com'
+
+login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+
 
 class LoginProcedure:
     @classmethod
@@ -43,7 +47,6 @@ class LoginProcedure:
         data['open_id'] = open_id
 
         return Status.ok, u'ok', data
-
 
     @classmethod
     def check_login_status(cls, cookies):

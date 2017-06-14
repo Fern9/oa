@@ -4,8 +4,10 @@ from flask import request
 from procedures.user_procedure import UserProcedure
 from procedures.login_procedure import LoginProcedure
 from utils.display_helper import Status, DisplayHelper
-from . import auth
 from utils.data_helper import DataHelper
+from flask import Blueprint
+
+auth = Blueprint('auth', __name__)
 
 
 @auth.route('/user', methods=['POST'])
