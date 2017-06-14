@@ -14,6 +14,8 @@ class DataHelper:
         """
         if object is None:
             return Status.failed, u'None exception', None
+        if attr is None:
+            return Status.ok, u'ok', obj
         for key in attr:
             if hasattr(obj, key):
                 setattr(obj, key, attr[key])

@@ -1,4 +1,5 @@
 # coding=utf-8
+from flask import session
 from flask_login import current_user
 from mongoengine import ValidationError
 
@@ -7,7 +8,6 @@ from utils.data_helper import DataHelper
 from utils.display_helper import Status
 from login_procedure import LoginProcedure
 from bson import json_util
-
 
 
 class UserProcedure:
@@ -58,6 +58,18 @@ class UserProcedure:
             return Status.not_found, u'not found user', None
         return Status.ok, u'ok', user
 
+    @classmethod
+    def update_user(cls, user_id, content):
+        user = User.objects.get(id=user_id)
+        if 'wx_userinfo' in content:
+            user.wx_userinfo = content.get('wx_userinfo')
+        user = DataHelper.init_object_from_dict(user, content.get('userinfo'))
+        user.save()
 
-
-
+    @classmethod
+    def update_curr_user(cls, content):
+        if 'open_id' not in session:
+            return Status.unauth, u'未找到登录信息', None
+        open_id = session['open_id']
+        user = User.objects(wx_open_id=open_id).first()
+        cls.update_user(user.get_id(), content)

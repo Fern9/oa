@@ -1,23 +1,28 @@
 # coding=utf-8
 from flask import request
+
 from procedures.user_procedure import UserProcedure
 from procedures.login_procedure import LoginProcedure
 from utils.display_helper import Status, DisplayHelper
 from . import auth
 from utils.data_helper import DataHelper
 
+
 @auth.route('/user', methods=['POST'])
 def user():
     """
     action == register:注册
     action == login:登录
+    action == update: 更新
     ...
     """
     content = request.json
     action = content['action']
+    content.pop('action')
     if action == "register":
-        content.pop('action')
         code, msg, data = UserProcedure.user_register(content)
+    elif action == 'update':
+        code, msg, data = UserProcedure.update_curr_user(content)
     else:
         code = Status.failed
         msg = u'无此 action'
@@ -58,5 +63,3 @@ def wx_login():
 @auth.route('/test')
 def test():
     return 'hello world'
-
-
