@@ -7,7 +7,6 @@ from models import User, Role
 from utils.data_helper import DataHelper
 from utils.display_helper import Status
 from login_procedure import LoginProcedure
-from bson import json_util
 
 
 class UserProcedure:

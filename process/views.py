@@ -1,16 +1,24 @@
-import json
-from models import ProcessDefine
-from flask import Blueprint
+from flask import Blueprint, request
+from .procedure.process_procedure import Process
+from utils.display_helper import DisplayHelper
 
 process = Blueprint('process', __name__)
 
+@process.route('/instance')
+"""
+action == create 创建并启动流程
+"""
+def process():
+    content = request.json()
+    if content.get('action') == 'create':
+        process_name = content.get('process_name')
+        form = content.get('form')
+        code, msg, data = Process.create_process_instance(process_name, form)
+    return DisplayHelper.output(code, msg, data)
+
 @process.route('/test')
 def test():
-    with open('./repair_apply_process_define.json') as json_file:
-        define = json.load(json_file)
-
-    process_define = ProcessDefine()
-    for key in define:
-        if key != 'activities':
-            print key
-            setattr(process_define, define.get(key))
+    data = Process.create_process_instance('repair_apply', {"name":'zhangsan'})
+    print data
+    # Process.init_process_define()
+    return 'success'

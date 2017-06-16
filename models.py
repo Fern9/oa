@@ -47,12 +47,12 @@ class RepairForm(db.Document):
 
 
 class ProcessDefine(db.Document):
-    define_name = db.StringField()
+    define_name = db.StringField(unique=True)
     description = db.StringField()
     form_name = db.StringField()
-    activities = db.SortedListField(db.EmbeddedDocumentField('ActivityDefine'), odering='sequence', reverse=True)
+    activities = db.SortedListField(db.EmbeddedDocumentField('ActivityDefine'), ordering='sequence')
     state = db.IntField()
-    create_time = db.DateTimeField()
+    create_time = db.DateTimeField(default=datetime.datetime.now)
     update_time = db.DateTimeField()
     definer = db.StringField()
 
@@ -61,13 +61,12 @@ class ActivityDefine(db.EmbeddedDocument):
     define_name = db.StringField()
     description = db.StringField()
     sequence = db.IntField()
-    participant = db.ListField()
+    participants = db.ListField(db.DictField())
 
 
-class Participant(object):
-    def __init__(self, type, value):
-        self.type = type
-        self.value = value
+class Participant(db.EmbeddedDocument):
+    type = db.StringField()
+    value = db.StringField()
 
 
 class ProcessInst(db.Document):
@@ -76,17 +75,30 @@ class ProcessInst(db.Document):
     description = db.StringField()
     form = db.DictField()
     state = db.IntField()
-    activities = db.SortedListField(db.EmbeddedDocumentField('ActivityInst'), odering='sequence', reverse=True)
+    activities = db.SortedListField(db.EmbeddedDocumentField('ActivityInst'), ordering='sequence')
     creator = db.ReferenceField('User')
-    start_time = db.DateTimeField()
+    start_time = db.DateTimeField(default=datetime.datetime.now)
     end_time = db.DateTimeField()
 
 
 class ActivityInst(db.EmbeddedDocument):
     inst_name = db.StringField()
-    activity_define = db.ReferenceField('ActivityDefine')
+    activity_define = db.EmbeddedDocumentField('ActivityDefine')
     sequence = db.IntField()
-    participants = db.ListField()
+    participants = db.ListField(db.DictField())
     state = db.IntField()
     start_time = db.DateTimeField()
     end_time = db.DateTimeField()
+
+
+class DefineStatus(object):
+    active = 1
+    inactive = -1
+    old_version = 0
+
+
+class InstanceStatus(object):
+    new = 1
+    running = 2
+    block = 3
+    dead = 4

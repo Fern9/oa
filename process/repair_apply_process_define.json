@@ -1,61 +1,61 @@
 {
-  "define_name": "报修申请",
-  "description": "",
+  "define_name": "repair_apply",
+  "description": "报修申请",
   "form_name": "RepairForm",
   "activities": [
      {
        "define_name":"发起申请",
        "description":"普通用户发起维修申请，填写申请单",
-       "sequence":1,
-       "participant": {
+       "sequence":"1",
+       "participants": [{
           "type": "role",
           "value": "normal"
-       }
+       }]
      },
      {
        "define_name": "维修员接单",
        "description": "维修员查看申请并接单",
        "sequence":2,
-       "participant": {
+       "participants": [{
           "type": "role",
           "value": "repair"
-       }
+       }]
      },
      {
        "define_name":"维修员确认故障",
        "description":"维修员接单后到现场确认故障，编辑保修单,填写报价",
        "sequence":3,
-       "participant":{
+       "participants":[{
           "type": "front",
           "value": "2"
-       }
+       }]
      },
      {
        "define_name":"维修员维修并反馈，填写工时",
        "description":"维修后填写维修结果",
        "sequence":4,
-       "participant":{
+       "participants":[{
           "type": "front",
           "value": "2"
-       }
+       }]
      },
      {
        "define_name":"用户确认维修结果并付款",
        "description":"",
        "sequence":5,
-       "participant":{
+       "participants":[{
           "type": "front",
           "value": "1"
-       }
+       }]
      },
      {
        "define_name":"管理员确认",
        "description":"",
        "sequence":6,
-       "participant":{
+       "participants":[{
           "type": "role",
           "value": "admin"
-       }
+       }]
      }
   ],
   "state": 1,

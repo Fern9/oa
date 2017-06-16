@@ -117,3 +117,18 @@ data:
 
 
 
+## 流程
+
+### 创建并启动一个流程
+
+uri: `api/process/instance`
+
+method: `POST`
+
+data:
+
+| 名称           | 格式     | 备注                        |
+| ------------ | ------ | ------------------------- |
+| action       | string | 操作，[create]               |
+| process_name | string | 要启动的流程名，报修申请为repair_apply |
+| form         | dict   | 申请表单，具体字段见数据模型            |
