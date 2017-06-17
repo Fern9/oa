@@ -35,6 +35,7 @@ class LoginProcedure:
 
     @classmethod
     def get_login_data(cls, content):
+        print content
         encryptedData = content['encryptedData']
         code = content['code']
         iv = content['iv']
