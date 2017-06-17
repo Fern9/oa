@@ -75,14 +75,15 @@ class ProcessInst(db.Document):
     description = db.StringField()
     form = db.DictField()
     state = db.IntField()
-    activities = db.SortedListField(db.EmbeddedDocumentField('ActivityInst'), ordering='sequence')
+    # activities = db.SortedListField(db.ReferenceField('ActivityInst'))
     creator = db.ReferenceField('User')
     start_time = db.DateTimeField(default=datetime.datetime.now)
     end_time = db.DateTimeField()
 
 
-class ActivityInst(db.EmbeddedDocument):
+class ActivityInst(db.Document):
     inst_name = db.StringField()
+    process_inst = db.ReferenceField('ProcessInst')
     activity_define = db.EmbeddedDocumentField('ActivityDefine')
     sequence = db.IntField()
     participants = db.ListField(db.DictField())
@@ -98,7 +99,8 @@ class DefineStatus(object):
 
 
 class InstanceStatus(object):
-    new = 1
-    running = 2
-    block = 3
-    dead = 4
+    new = 1 #新建
+    wait = 2 #等待领取
+    running = 3 #正在运行
+    block = 4  #挂起
+    dead = 5  #结束

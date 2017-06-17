@@ -1,3 +1,4 @@
+# coding:utf-8
 import json
 import os
 
@@ -5,7 +6,7 @@ from flask import session
 
 import settings
 
-from models import ProcessDefine, ActivityDefine, ProcessInst, User, ActivityInst
+from models import ProcessDefine, ActivityDefine, ProcessInst, User, ActivityInst, InstanceStatus
 from utils.display_helper import Status
 
 
@@ -47,31 +48,76 @@ class Process():
         process_instance.process_define = process_define
         process_instance.description = process_define.description
         process_instance.state = 1
+        process_instance.form = form
+        process_instance.save()
         # if 'open_id' not in session:
         #     return Status.unauth, u'need to login', None
         # curr_user = User.objects(wx_open_id=session['open_id']).first()
         # process_instance.creator = curr_user
+        is_start = True
         for activity in process_define.activities:
             activity_inst = ActivityInst()
             activity_inst.inst_name = activity.define_name
+            activity_inst.process_inst = process_instance
             activity_inst.activity_define = activity
-            activity_inst.state = 1
+            activity_inst.state = InstanceStatus.new
             activity_inst.sequence = activity.sequence
             activity_inst.participants = []
-            process_instance.activities.insert(activity_inst.sequence, activity_inst)
-        process_instance.activities[0].state = 2
-        process_instance.activities[0].participants.append({'type': 'user', 'value': 123})
-        process_instance.activities[0].form = form
-        process_instance.form = form
-        process_instance.save()
+            if is_start:
+                activity_inst.state = InstanceStatus.running
+                # activity_inst.participants.append({'typr': 'user', 'value': User.objects(wx_open_id=session['open_id']).first().get('id')})
+                activity_inst.form = form
+                is_start = False
+            activity_inst.save()
         return Status.ok, u'ok', {'id': process_instance.id}
 
     @classmethod
     def finish_curr_activity_start_next(cls, process_inst_id):
         process_instance = ProcessInst.objects().get(id=process_inst_id)
-        curr_index = 0
-        for x in process_instance.activities:
-            if process_instance.activities[x].state == 2:
-                curr_index = x
-        process_instance.activities[curr_index].state = 4
-        process_instance.activities[curr_index+1].state = 2
+        # 如果流程不处于运行状态，直接返回失败
+        if process_instance.state == InstanceStatus.dead:
+            return Status.failed, u'流程处于非运行状态', None
+        activities = ActivityInst.objects(process_inst=process_instance).all()
+        for activity in activities:
+            if activity.state == InstanceStatus.running:
+                curr_activity = activity
+                break
+        next_activity = ActivityInst.objects(process_inst=process_instance, sequence=curr_activity.sequence + 1).first()
+        curr_activity.state = InstanceStatus.dead
+        # 如果当前为最后一环互动，则直接结束流程
+        if next_activity is None:
+            process_instance.state = InstanceStatus.dead
+        else:
+            next_activity.state = InstanceStatus.wait
+        return Status.ok, u'ok', None
+
+    @classmethod
+    def run_activity(cls, activity_id, user):
+        activity = ActivityInst.objects().get(id=activity_id)
+        if activity.state != InstanceStatus.wait:
+            return Status.failed, u'该活动不出于待领取状态，不能领取', None
+        activity.state = InstanceStatus.running
+        user_dict = {'type': 'user', 'id': user.id}
+        activity.participants.append(user_dict)
+        activity.save()
+        return Status.ok, u'ok', None
+
+
+
+
+
+
+    @classmethod
+    def get_wait_activities(cls, user):
+        participant_dict1 = {'type': 'user', 'vaule': user.id}
+        participant_dict2 = {'type': 'role', 'vaule': user.role.name}
+        activities1 = set(ActivityInst.objects(participants__contains=participant_dict1, state=InstanceStatus.wait).all())
+        activities2 = set(ActivityInst.objects(participants__contains=participant_dict2, state=InstanceStatus.wait).all())
+        activities = [x for x in (activities1 | activities2)]
+        return activities
+
+    @classmethod
+    def get_running_activities(cls, user):
+        participant_dict = {'type': 'user', 'vaule': user.id}
+        activities = ActivityInst.objects(participants__contains=participant_dict, state=InstanceStatus.running).all()
+        return activities
