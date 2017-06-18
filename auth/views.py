@@ -65,3 +65,5 @@ def wx_login():
 @auth.route('/test')
 def test():
     return 'hello world'
+
+
