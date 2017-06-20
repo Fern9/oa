@@ -2,6 +2,7 @@
 from flask import Blueprint, request
 
 from models import User
+from flask import session
 from .procedure.process_procedure import Process
 from utils.display_helper import DisplayHelper, Status
 
@@ -13,7 +14,8 @@ def process_instance():
     """
     action == create 创建并启动流程
     """
-
+    print request.cookies
+    print session
     content = request.json
     if content.get('action') == 'create':
     #     process_name = content.get('process_name')
