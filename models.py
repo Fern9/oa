@@ -12,8 +12,10 @@ class User(db.Document, UserMixin):
     wx_open_id = db.StringField(required=True)
     name = db.StringField()  # 姓名
     phone = db.StringField()  # 联系电话
+    phone_short = db.StringField() #手机短号
     address = db.StringField()  # 地址
     company = db.StringField()  # 工作单位
+    office = db.StringField()  #处室
     age = db.IntField()  # 年龄
     email = db.EmailField()  # 邮箱
     register_time = db.DateTimeField(default=datetime.datetime.now)  # 注册时间
@@ -21,7 +23,7 @@ class User(db.Document, UserMixin):
     role = db.ReferenceField('Role')
 
     def get_id(self):
-        return self.wx_open_id
+        return self.id
 
 
 class Role(db.Document):
@@ -44,6 +46,7 @@ class RepairForm(db.Document):
     address = db.StringField()
     phone = db.StringField()
     comment = db.StringField()
+    image = db.ImageField()
 
 
 class ProcessDefine(db.Document):
@@ -86,7 +89,7 @@ class ActivityInst(db.Document):
     process_inst = db.ReferenceField('ProcessInst')
     activity_define = db.EmbeddedDocumentField('ActivityDefine')
     sequence = db.IntField()
-    participants = db.ListField(db.DictField())
+    participants = db.ListField(db.EmbeddedDocumentField('Participant'))
     state = db.IntField()
     start_time = db.DateTimeField()
     end_time = db.DateTimeField()

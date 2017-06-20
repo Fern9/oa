@@ -3,3 +3,4 @@ python
 flask-mongoengine
 pycrypto
 flask_login
+pillow

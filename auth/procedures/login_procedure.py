@@ -79,4 +79,4 @@ class LoginProcedure:
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.objects(wx_open_id=user_id).first()
+    return User.objects(id=user_id).first()
