@@ -64,7 +64,8 @@ class ActivityDefine(db.EmbeddedDocument):
     define_name = db.StringField()
     description = db.StringField()
     sequence = db.IntField()
-    participants = db.ListField(db.DictField())
+    direct_active = db.BooleanField(default=True)
+    participants = db.EmbeddedDocumentField('Participant')
 
 
 class Participant(db.EmbeddedDocument):

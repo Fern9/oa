@@ -1,6 +1,7 @@
 # coding=utf-8
 import json
 from bson import json_util
+from flask_mongoengine import BaseQuerySet
 
 
 class Status():
@@ -13,7 +14,18 @@ class Status():
 
 class DisplayHelper:
     @classmethod
+    def mongoset_to_dict(cls, mongoset):
+        return [ob.to_mongo().to_dict() for ob in mongoset]
+
+    @classmethod
     def output(cls, code=Status.ok, msg=u'', data=None):
+        if isinstance(data, BaseQuerySet):
+            data = cls.mongoset_to_dict(data)
+            return json_util.dumps({
+                "code": code,
+                "msg": msg,
+                "data": data
+            })
         return json.dumps({
             "code": code,
             "msg": msg,

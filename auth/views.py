@@ -44,10 +44,8 @@ def user_get():
     view = params['view']
     if view == "get_curr_user_info":
         code, msg, data = UserProcedure.get_curr_user_info()
-        data = DataHelper.mongoset_to_dict(data)
     elif view == "get_all":
         code, msg, data = UserProcedure.get_all_user_info()
-        data = DataHelper.mongoset_to_dict(data)
     else:
         code = Status.failed
         msg = u'无此 action'

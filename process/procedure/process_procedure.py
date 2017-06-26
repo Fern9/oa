@@ -8,6 +8,7 @@ import settings
 from flask_login import current_user
 from models import ProcessDefine, ActivityDefine, ProcessInst, User, ActivityInst, InstanceStatus, Participant
 from utils.display_helper import Status
+from itertools import chain
 
 
 class Process():
@@ -19,7 +20,7 @@ class Process():
         json_file_path = os.path.join(settings.APP_PATH, 'process/repair_apply_process_define.json')
         with open(json_file_path) as json_file:
             define = json.load(json_file)
-        for obj in ProcessDefine.objects():
+        for obj in ProcessDefine.objects().all():
             obj.delete()
         process_define = ProcessDefine()
         for key in define:
@@ -29,12 +30,12 @@ class Process():
         for activity in activities:
             activity_define = ActivityDefine()
             for key in activity:
-                if key != 'participant':
+                if key != 'participants':
                     setattr(activity_define, key, activity.get(key))
                 else:
-                    for participant in activity.get('participants'):
-                        # par = Participant(type=participant['type'], value=participant['value'])
-                        activity_define.participants.insert(p_object=participant)
+                    par_temp = activity.get('participants')
+                    participant = Participant(type=par_temp['type'], value=par_temp['value'])
+                    activity_define.participants = participant
             process_define.activities.append(activity_define)
         process_define.save()
 
@@ -91,36 +92,50 @@ class Process():
             process_instance.state = InstanceStatus.dead
             process_instance.save()
         else:
-            next_activity.state = InstanceStatus.wait
+            if next_activity.activity_define.direct_active:
+                if next_activity.activity_define.participants.type == 'role':
+                    next_activity.participants.append(next_activity.activity_define.participants)
+                elif next_activity.activity_define.participants.type == 'front':
+                    front_value = next_activity.activity_define.participants.value
+                    next_activity.participants = activities[front_value - 1].participants
+            else:
+                next_activity.state = InstanceStatus.wait
+            next_activity.form = curr_activity.form
             next_activity.save()
         return Status.ok, u'ok', None
 
     @classmethod
     def run_activity(cls, activity_id, user):
         activity = ActivityInst.objects().get(id=activity_id)
-        if activity.state != InstanceStatus.wait:
-            return Status.failed, u'该活动不处于待领取状态，不能领取', None
-        activity.state = InstanceStatus.running
-        participant = Participant(type='user', value=user.id)
-        activity.participants.append(participant)
+        if activity.state == InstanceStatus.wait:
+            activity.state = InstanceStatus.running
+            participant = Participant(type='user', value=user.id)
+            activity.participants.append(participant)
+        elif activity.state == InstanceStatus.block:
+            activity.state = InstanceStatus.running
+        else:
+            return Status.failed, u'该活动不能激活', None
         activity.save()
         return Status.ok, u'ok', None
 
     @classmethod
     def get_wait_activities(cls, user):
-        participant_dict1 = {'type': 'user', 'vaule': user.id}
-        participant_dict2 = {'type': 'role', 'vaule': user.role.name}
-        activities1 = set(
-            ActivityInst.objects(participants__contains=participant_dict1, state=InstanceStatus.wait).all())
-        activities2 = set(
-            ActivityInst.objects(participants__contains=participant_dict2, state=InstanceStatus.wait).all())
-        activities = [x for x in (activities1 | activities2)]
-        return activities
+        if user.role.name != 'admin':
+            activities = ActivityInst.objects(activity_define__participants__value=user.role.name,
+                                        state=InstanceStatus.wait).all()
+        else:
+            activities = ActivityInst.objects(state=InstanceStatus.wait).all()
+        return Status.ok, u'ok', activities
+
+    @classmethod
+    def get_curr_user_wait_activities(cls):
+        return cls.get_wait_activities(current_user)
 
     @classmethod
     def get_running_activities(cls, user):
-        activities = ActivityInst.objects(participants__match={"type": "user", "value": str(user.id)}, state=InstanceStatus.running).all()
-        return activities
+        activities = ActivityInst.objects.filter(participants__value__in=['normal', str(user.id)],
+                                                 state=InstanceStatus.running).all()
+        return Status.ok, u'ok', activities
 
     @classmethod
     def get_curr_user_running_activities(cls):

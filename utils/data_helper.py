@@ -24,9 +24,6 @@ class DataHelper:
                 # return Status.failed, u'parameter include invalid attribute: ' + key, None
         return Status.ok, u'ok', obj
 
-    @classmethod
-    def mongoset_to_dict(cls, mongoset):
-        return [ob.to_mongo().to_dict() for ob in mongoset]
 
     @classmethod
     def init_roles(cls):
