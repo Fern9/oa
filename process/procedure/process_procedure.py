@@ -70,6 +70,10 @@ class Process():
                 activity_inst.participants.append(participant)
                 activity_inst.form = form
                 is_start = False
+                activity_inst.save()
+                process_instance.curr_activity = activity_inst
+                process_instance.save()
+
             activity_inst.save()
         return Status.ok, u'ok', {'id': process_instance.id}
 
@@ -90,6 +94,7 @@ class Process():
         # 如果当前为最后一环互动，则直接结束流程
         if next_activity is None:
             process_instance.state = InstanceStatus.dead
+            process_instance.curr_activity = None
             process_instance.save()
         else:
             if next_activity.activity_define.direct_active:
@@ -102,6 +107,8 @@ class Process():
                 next_activity.state = InstanceStatus.wait
             next_activity.form = curr_activity.form
             next_activity.save()
+            process_instance.curr_activity = next_activity
+            process_instance.save()
         return Status.ok, u'ok', None
 
     @classmethod

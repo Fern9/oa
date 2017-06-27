@@ -78,6 +78,7 @@ class ProcessInst(db.Document):
     process_define = db.ReferenceField('ProcessDefine')
     description = db.StringField()
     form = db.DictField()
+    curr_activity = db.ReferenceField('ActivityInst')
     state = db.IntField()
     # activities = db.SortedListField(db.ReferenceField('ActivityInst'))
     creator = db.ReferenceField('User')
