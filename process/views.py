@@ -32,6 +32,18 @@ def process_instance():
     return DisplayHelper.output(code, msg, data)
 
 
+@process.route('/activities', methods=['GET'])
+def get_activities():
+    """
+    view = get_wait 获取当前用户可领取任务
+    :return:
+    """
+    view = request.args['view']
+    if view == 'get_wait':
+        code, msg, data = Process.get_wait_activities()
+    return DisplayHelper.output(code, msg, data)
+
+
 @process.route('/init_process')
 def process_define_init():
     Process.init_process_define()

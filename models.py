@@ -92,6 +92,7 @@ class ActivityInst(db.Document):
     activity_define = db.EmbeddedDocumentField('ActivityDefine')
     sequence = db.IntField()
     participants = db.ListField(db.EmbeddedDocumentField('Participant'))
+    form = db.DictField()
     state = db.IntField()
     start_time = db.DateTimeField()
     end_time = db.DateTimeField()

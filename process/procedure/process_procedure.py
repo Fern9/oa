@@ -48,7 +48,7 @@ class Process():
         process_instance.inst_name = process_define.define_name
         process_instance.process_define = process_define
         process_instance.description = process_define.description
-        process_instance.state = 1
+        process_instance.state = InstanceStatus.running
         process_instance.form = form
         if 'open_id' not in session:
             return Status.unauth, u'need to login', None
@@ -79,6 +79,11 @@ class Process():
 
     @classmethod
     def finish_curr_activity_start_next(cls, process_inst_id):
+        """
+        结束流程当前环节并开始下一环节
+        :param process_inst_id:
+        :return:
+        """
         process_instance = ProcessInst.objects().get(id=process_inst_id)
         # 如果流程不处于运行状态，直接返回失败
         if process_instance.state == InstanceStatus.dead:
@@ -98,6 +103,7 @@ class Process():
             process_instance.save()
         else:
             if next_activity.activity_define.direct_active:
+                next_activity.state = InstanceStatus.running
                 if next_activity.activity_define.participants.type == 'role':
                     next_activity.participants.append(next_activity.activity_define.participants)
                 elif next_activity.activity_define.participants.type == 'front':
@@ -112,7 +118,7 @@ class Process():
         return Status.ok, u'ok', None
 
     @classmethod
-    def run_activity(cls, activity_id, user):
+    def run_activity(cls, activity_id, user=current_user):
         activity = ActivityInst.objects().get(id=activity_id)
         if activity.state == InstanceStatus.wait:
             activity.state = InstanceStatus.running
@@ -126,24 +132,53 @@ class Process():
         return Status.ok, u'ok', None
 
     @classmethod
-    def get_wait_activities(cls, user):
+    def get_wait_activities(cls, user=current_user):
+        """
+        获取待领取的任务
+        :param user:
+        :return:
+        """
         if user.role.name != 'admin':
             activities = ActivityInst.objects(activity_define__participants__value=user.role.name,
-                                        state=InstanceStatus.wait).all()
+                                              state=InstanceStatus.wait).all()
         else:
             activities = ActivityInst.objects(state=InstanceStatus.wait).all()
         return Status.ok, u'ok', activities
 
     @classmethod
-    def get_curr_user_wait_activities(cls):
-        return cls.get_wait_activities(current_user)
-
-    @classmethod
-    def get_running_activities(cls, user):
+    def get_running_activities(cls, user=current_user):
+        """
+        获取前用户正在运行的活动
+        :param user:
+        :return:
+        """
         activities = ActivityInst.objects.filter(participants__value__in=['normal', str(user.id)],
                                                  state=InstanceStatus.running).all()
         return Status.ok, u'ok', activities
 
+
     @classmethod
-    def get_curr_user_running_activities(cls):
-        return cls.get_running_activities(current_user)
+    def get_running_start_by(cls, user=current_user):
+        """
+        获取有用户发起的并且当前流程正在运行的活动
+        :param user:
+        :return:
+        """
+        process_inst = ProcessInst.objects(state=InstanceStatus.running)
+        print user.id
+        activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)], sequence=1,
+                                                 process_inst__in=process_inst)
+        return Status.ok, u'ok', activities
+
+
+
+    @classmethod
+    def get_end_history(cls, user=current_user):
+        """获取用户参与的已经结束的流程"""
+        activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)])
+        process_id_list = set()
+        for activity in activities:
+            process_id_list.add(activity.process_inst.id)
+        processes = ProcessInst.objects.filter(id__in=process_id_list, state=InstanceStatus.dead)
+        print processes
+        return Status.ok, u'ok', processes

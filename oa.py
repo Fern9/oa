@@ -16,11 +16,11 @@ app.register_blueprint(process, url_prefix='/api/process')
 login_manager.init_app(app)
 
 app.session_interface = MongoEngineSessionInterface(db)
-http_server = HTTPServer(WSGIContainer(app))
-http_server.listen(5000)
+# http_server = HTTPServer(WSGIContainer(app))
+# http_server.listen(5000)
 
 
 
 if __name__ == '__main__':
-    # app.run(debug=True)
-    IOLoop.instance().start()
+    app.run(debug=True)
+    # IOLoop.instance().start()

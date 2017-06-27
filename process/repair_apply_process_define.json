@@ -27,7 +27,7 @@
        "define_name":"维修员确认故障",
        "description":"维修员接单后到现场确认故障，编辑保修单,填写报价",
        "sequence":3,
-       "derect_active": false,
+       "derect_active": true,
        "participants":{
           "type": "front",
           "value": "2"
