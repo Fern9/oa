@@ -4,9 +4,9 @@ from auth.views import auth as blue_auth
 from process.views import process
 from models import db
 from auth.procedures.login_procedure import login_manager
-from tornado.wsgi import WSGIContainer
-from tornado.httpserver import HTTPServer
-from tornado.ioloop import IOLoop
+# from tornado.wsgi import WSGIContainer
+# from tornado.httpserver import HTTPServer
+# from tornado.ioloop import IOLoop
 
 app = Flask(__name__)
 app.config.from_object('config')
