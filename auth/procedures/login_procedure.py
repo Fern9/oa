@@ -63,8 +63,8 @@ class LoginProcedure:
         if code != Status.ok:
             return code, msg, None
         user = User.objects(wx_open_id=data['open_id']).first()
-        if user is None:
-        # if True:
+        # if user is None:
+        if True:
             # UserProcedure.user_register(content)
             return Status.not_found, u'user not found', None
         # user = User.objects(wx_open_id=data['open_id']).first()

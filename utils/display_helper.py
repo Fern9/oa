@@ -18,8 +18,8 @@ class DisplayHelper:
         return [ob.to_mongo().to_dict() for ob in mongoset]
 
     @classmethod
-    def output(cls, code=Status.ok, msg=u'', data=None):
-        if isinstance(data, BaseQuerySet):
+    def output(cls, code=Status.ok, msg=u'', data=None, is_mongo=False):
+        if isinstance(data, BaseQuerySet) or is_mongo:
             data = cls.mongoset_to_dict(data)
             return json_util.dumps({
                 "code": code,

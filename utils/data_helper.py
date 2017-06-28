@@ -41,3 +41,5 @@ class DataHelper:
         common.save()
         repairer.save()
         admin.save()
+
+

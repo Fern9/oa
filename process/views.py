@@ -41,7 +41,13 @@ def get_activities():
     view = request.args['view']
     if view == 'get_wait':
         code, msg, data = Process.get_wait_activities()
-    return DisplayHelper.output(code, msg, data)
+    if view == 'get_list_start_by_me':
+        code, msg, data = Process.get_running_start_by()
+    if view == 'get_history':
+        code, msg, data = Process.get_end_history()
+    if view == 'get_running':
+        code, msg, data = Process.get_running_activities()
+    return DisplayHelper.output(code, msg, data, True)
 
 
 @process.route('/init_process')

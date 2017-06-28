@@ -68,7 +68,6 @@ class Process():
                 activity_inst.state = InstanceStatus.running
                 participant = Participant(type='user', value=str(current_user.id))
                 activity_inst.participants.append(participant)
-                activity_inst.form = form
                 is_start = False
                 activity_inst.save()
                 process_instance.curr_activity = activity_inst
@@ -111,7 +110,7 @@ class Process():
                     next_activity.participants = activities[front_value - 1].participants
             else:
                 next_activity.state = InstanceStatus.wait
-            next_activity.form = curr_activity.form
+            # next_activity.form = curr_activity.form
             next_activity.save()
             process_instance.curr_activity = next_activity
             process_instance.save()
@@ -143,7 +142,8 @@ class Process():
                                               state=InstanceStatus.wait).all()
         else:
             activities = ActivityInst.objects(state=InstanceStatus.wait).all()
-        return Status.ok, u'ok', activities
+        processes = cls.get_process_by_activities(activities)
+        return Status.ok, u'ok', processes
 
     @classmethod
     def get_running_activities(cls, user=current_user):
@@ -154,7 +154,9 @@ class Process():
         """
         activities = ActivityInst.objects.filter(participants__value__in=['normal', str(user.id)],
                                                  state=InstanceStatus.running).all()
-        return Status.ok, u'ok', activities
+
+        processes = cls.get_process_by_activities(activities)
+        return Status.ok, u'ok', processes
 
 
     @classmethod
@@ -168,7 +170,8 @@ class Process():
         print user.id
         activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)], sequence=1,
                                                  process_inst__in=process_inst)
-        return Status.ok, u'ok', activities
+        processes = cls.get_process_by_activities(activities)
+        return Status.ok, u'ok', processes
 
 
 
@@ -180,5 +183,21 @@ class Process():
         for activity in activities:
             process_id_list.add(activity.process_inst.id)
         processes = ProcessInst.objects.filter(id__in=process_id_list, state=InstanceStatus.dead)
-        print processes
         return Status.ok, u'ok', processes
+
+    @classmethod
+    def update_form(cls,process_id, form):
+        process_inst = ProcessInst.objects(id=process_id)
+        if process_inst is None:
+            return Status.not_found, u'failed', None
+        for key in form:
+            process_inst.form[key] = form[key]
+        process_inst.save()
+        return Status.ok, u'ok', None
+
+    @classmethod
+    def get_process_by_activities(cls, activities):
+        processes = set()
+        for activity in activities:
+            processes.add(activity.process_inst)
+        return processes
