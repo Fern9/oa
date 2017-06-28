@@ -32,6 +32,7 @@ def process_instance():
     return DisplayHelper.output(code, msg, data)
 
 
+
 @process.route('/activities', methods=['GET'])
 def get_activities():
     """
@@ -41,9 +42,13 @@ def get_activities():
     view = request.args['view']
     if view == 'get_wait':
         code, msg, data = Process.get_wait_activities()
-    if view == 'get_list_start_by_me':
-        code, msg, data = Process.get_running_start_by()
-    if view == 'get_history':
+    if view == 'get_wait_order':
+        code, msg, data = Process.get_wait_order()
+    if view == 'get_wait_repair':
+        code, msg, data = Process.get_wait_repair()
+    if view == 'get_all_history':
+        code, msg, data = Process.get_all_history()
+    if view == 'get_end_history':
         code, msg, data = Process.get_end_history()
     if view == 'get_running':
         code, msg, data = Process.get_running_activities()

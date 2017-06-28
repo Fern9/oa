@@ -167,7 +167,6 @@ class Process():
         :return:
         """
         process_inst = ProcessInst.objects(state=InstanceStatus.running)
-        print user.id
         activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)], sequence=1,
                                                  process_inst__in=process_inst)
         processes = cls.get_process_by_activities(activities)
@@ -186,6 +185,16 @@ class Process():
         return Status.ok, u'ok', processes
 
     @classmethod
+    def get_all_history(cls, user=current_user):
+        """获取用户参与的所有流程"""
+        activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)])
+        process_id_list = set()
+        for activity in activities:
+            process_id_list.add(activity.process_inst.id)
+        processes = ProcessInst.objects.filter(id__in=process_id_list)
+        return Status.ok, u'ok', processes
+
+    @classmethod
     def update_form(cls,process_id, form):
         process_inst = ProcessInst.objects(id=process_id)
         if process_inst is None:
@@ -196,8 +205,37 @@ class Process():
         return Status.ok, u'ok', None
 
     @classmethod
+    def get_wait_order(cls, user=current_user):
+        """待接单
+        :param user:
+        :return:
+        """
+        activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)], sequence=1)
+        processes = set()
+        for activity in activities:
+            if activity.process_inst.curr_activity.state == InstanceStatus.wait:
+                processes.add(activity.process_inst)
+        return Status.ok, u'ok', processes
+
+    @classmethod
+    def get_wait_repair(cls, user=current_user):
+        """待修理
+        :param user:
+        :return:
+        """
+        activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)], sequence=1)
+        processes = set()
+        for activity in activities:
+            if activity.process_inst.curr_activity.state == InstanceStatus.running:
+                processes.add(activity.process_inst)
+        return Status.ok, u'ok', processes
+
+    @classmethod
     def get_process_by_activities(cls, activities):
         processes = set()
         for activity in activities:
             processes.add(activity.process_inst)
         return processes
+
+
+
