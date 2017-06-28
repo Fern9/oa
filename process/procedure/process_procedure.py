@@ -167,7 +167,7 @@ class Process():
         :return:
         """
         process_inst = ProcessInst.objects(state=InstanceStatus.running)
-        print user.id
+        # print user.id
         activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)], sequence=1,
                                                  process_inst__in=process_inst)
         processes = cls.get_process_by_activities(activities)
