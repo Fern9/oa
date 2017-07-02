@@ -8,8 +8,7 @@ import settings
 from flask_login import current_user
 from models import ProcessDefine, ActivityDefine, ProcessInst, User, ActivityInst, InstanceStatus, Participant
 from utils.display_helper import Status
-from itertools import chain
-
+from auth.procedures.user_procedure import UserProcedure
 
 class Process():
     def __init__(self):
@@ -232,10 +231,25 @@ class Process():
 
     @classmethod
     def get_process_by_activities(cls, activities):
+        """
+        传入活动列表，返回对应的流程列表
+        :param activities:
+        :return:
+        """
         processes = set()
         for activity in activities:
             processes.add(activity.process_inst)
         return processes
 
+    @classmethod
+    def get_process_data(cls, process_id):
+        process = ProcessInst.objects(id=process_id).first()
+        if process is None:
+            return Status.not_found, u'未找到流程信息', None
+        data = dict()
+        data['process_data'] = process
+        data['curr_data'] = process.curr_activity
+        data['curr_participants'] = UserProcedure.participants_to_users(process.curr_activity.participants)
+        return Status.ok, 'ok', data
 
 

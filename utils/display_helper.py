@@ -15,7 +15,10 @@ class Status():
 class DisplayHelper:
     @classmethod
     def mongoset_to_dict(cls, mongoset):
-        return [ob.to_mongo().to_dict() for ob in mongoset]
+        if isinstance(mongoset, (BaseQuerySet, set, list)):
+            return [ob.to_mongo().to_dict() for ob in mongoset]
+        else:
+            return mongoset.to_mongo().to_dict()
 
     @classmethod
     def output(cls, code=Status.ok, msg=u'', data=None, is_mongo=False):

@@ -74,3 +74,16 @@ class UserProcedure:
         open_id = session['open_id']
         user = User.objects(wx_open_id=open_id).first()
         cls.update_user(user.get_id(), content)
+
+    @classmethod
+    def participants_to_users(cls, pars):
+        users = list()
+        role_dict={'normal': '普通用户', 'repair': '维修员', 'admin': '管理员'}
+        for par in pars:
+            if par.type == 'user':
+                users.append(User.objects(id=par.value).first())
+            elif par.type == 'role':
+                users.append({'name': role_dict[par.value], 'phone': ''})
+        return users
+
+

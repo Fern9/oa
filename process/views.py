@@ -1,4 +1,5 @@
 # coding=utf-8
+from bson import json_util
 from flask import Blueprint, request
 
 from models import User, ProcessDefine
@@ -52,6 +53,19 @@ def get_activities():
         code, msg, data = Process.get_end_history()
     if view == 'get_running':
         code, msg, data = Process.get_running_activities()
+    if view == 'get_process_data':
+        process_id = request.args['process_id']
+        code, msg, data = Process.get_process_data(process_id)
+        data['process_data'] = DisplayHelper.mongoset_to_dict(data['process_data'])
+        data['curr_data'] = DisplayHelper.mongoset_to_dict(data['curr_data'])
+        for i in range(len(data['curr_participants'])):
+            if isinstance(data['curr_participants'][i], User):
+                data['curr_participants'][i] = DisplayHelper.mongoset_to_dict(data['curr_participants'][i])
+        return json_util.dumps({
+            "code": code,
+            "msg": msg,
+            "data": data
+        })
     return DisplayHelper.output(code, msg, data, True)
 
 
