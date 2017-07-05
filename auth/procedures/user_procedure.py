@@ -1,6 +1,6 @@
 # coding=utf-8
 from flask import session
-from flask_login import current_user
+from flask_login import current_user, AnonymousUserMixin
 from mongoengine import ValidationError
 
 from models import User, Role
@@ -43,9 +43,15 @@ class UserProcedure:
 
     @classmethod
     def get_curr_user_info(cls):
-        if current_user is None:
+        if current_user is None or isinstance(current_user, AnonymousUserMixin):
             return Status.unauth, u'当前未登录', None
         return Status.ok, u'ok', current_user
+
+    @classmethod
+    def get_curr_user_role(cls):
+        if current_user is None or isinstance(current_user, AnonymousUserMixin):
+            return Status.unauth, u'当前未登录', None
+        return Status.ok, u'ok', current_user.role
 
     @classmethod
     def get_all_user_info(cls):

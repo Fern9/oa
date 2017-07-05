@@ -6,6 +6,8 @@ from procedures.login_procedure import LoginProcedure
 from utils.display_helper import Status, DisplayHelper
 from utils.data_helper import DataHelper
 from flask import Blueprint
+from models import User
+import bson
 
 auth = Blueprint('auth', __name__)
 
@@ -44,6 +46,8 @@ def user_get():
     view = params['view']
     if view == "get_curr_user_info":
         code, msg, data = UserProcedure.get_curr_user_info()
+    if view == "get_curr_user_role":
+        code, msg, data = UserProcedure.get_curr_user_role()
     elif view == "get_all":
         code, msg, data = UserProcedure.get_all_user_info()
     else:
