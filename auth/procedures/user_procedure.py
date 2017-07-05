@@ -18,9 +18,7 @@ class UserProcedure:
         """
         user = User()
         code = content.get('code')
-        print code
         session_key, openid = LoginProcedure.get_open_id(code)
-        print openid
         user.wx_open_id = openid
         content.pop('code')
         user.wx_userinfo = content.get('wx_userinfo')
