@@ -50,7 +50,7 @@ def user_get():
         code = Status.failed
         msg = u'无此 action'
         data = None
-    return DisplayHelper.output(code, msg, data)
+    return DisplayHelper.output(code, msg, data, True)
 
 
 @auth.route('/login', methods=['POST'])

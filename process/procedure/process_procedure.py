@@ -91,6 +91,9 @@ class Process():
             if activity.state == InstanceStatus.running:
                 curr_activity = activity
                 break
+        # 如果当前状态为待领取，则领取
+        if curr_activity.state == InstanceStatus.wait:
+            return cls.run_activity(curr_activity.id)
         next_activity = ActivityInst.objects(process_inst=process_instance, sequence=curr_activity.sequence + 1).first()
         curr_activity.state = InstanceStatus.dead
         curr_activity.save()
