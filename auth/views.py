@@ -6,8 +6,6 @@ from procedures.login_procedure import LoginProcedure
 from utils.display_helper import Status, DisplayHelper
 from utils.data_helper import DataHelper
 from flask import Blueprint
-from models import User
-import bson
 
 auth = Blueprint('auth', __name__)
 
@@ -50,11 +48,14 @@ def user_get():
         code, msg, data = UserProcedure.get_curr_user_role()
     elif view == "get_all":
         code, msg, data = UserProcedure.get_all_user_info()
+    elif view == "init_role":
+        code, msg, data = DataHelper.init_roles()
     else:
         code = Status.failed
         msg = u'无此 action'
         data = None
     return DisplayHelper.output(code, msg, data, True)
+
 
 
 @auth.route('/login', methods=['POST'])
