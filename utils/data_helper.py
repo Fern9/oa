@@ -24,7 +24,6 @@ class DataHelper:
                 # return Status.failed, u'parameter include invalid attribute: ' + key, None
         return Status.ok, u'ok', obj
 
-
     @classmethod
     def init_roles(cls):
         """初始化角色信息
@@ -42,4 +41,4 @@ class DataHelper:
         repairer.save()
         admin.save()
 
-
+        return 200, u'', None
