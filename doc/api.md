@@ -132,3 +132,19 @@ data:
 | action       | string | 操作，[create]               |
 | process_name | string | 要启动的流程名，报修申请为repair_apply |
 | form         | dict   | 申请表单，具体字段见数据模型            |
+
+
+
+### 结束当前活动
+
+uri: `api/process/instance`
+
+method: `POST`
+
+data:
+
+| 名称         | 格式     | 备注     |
+| ---------- | ------ | ------ |
+| action     | string | finish |
+| process_id | string | 流程id   |
+
