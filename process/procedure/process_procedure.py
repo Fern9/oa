@@ -225,7 +225,7 @@ class Process():
         :param user:
         :return:
         """
-        activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)], sequence=1)
+        activities = ActivityInst.objects.filter(participants__value__in=[str(user.id)])
         processes = set()
         for activity in activities:
             if activity.process_inst.curr_activity.state == InstanceStatus.running:
