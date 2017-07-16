@@ -88,7 +88,7 @@ class Process():
             return Status.failed, u'流程处于非运行状态', None
         activities = ActivityInst.objects(process_inst=process_instance).all()
         for activity in activities:
-            if activity.state == InstanceStatus.running or activity.state == InstanceStatus.wait:
+            if activity.state == InstanceStatus.running or activity.state == InstanceStatus.wait    :
                 curr_activity = activity
                 break
         # 如果当前状态为待领取，则领取
@@ -123,7 +123,7 @@ class Process():
         activity = ActivityInst.objects().get(id=activity_id)
         if activity.state == InstanceStatus.wait:
             activity.state = InstanceStatus.running
-            participant = Participant(type='user', value=user.id)
+            participant = Participant(type='user', value=str(user.id))
             activity.participants.append(participant)
         elif activity.state == InstanceStatus.block:
             activity.state = InstanceStatus.running
