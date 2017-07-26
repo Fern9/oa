@@ -9,6 +9,8 @@ from flask_login import current_user
 from models import ProcessDefine, ActivityDefine, ProcessInst, User, ActivityInst, InstanceStatus, Participant
 from utils.display_helper import Status
 from auth.procedures.user_procedure import UserProcedure
+import page_config
+
 
 class Process():
     def __init__(self):
@@ -88,7 +90,7 @@ class Process():
             return Status.failed, u'流程处于非运行状态', None
         activities = ActivityInst.objects(process_inst=process_instance).all()
         for activity in activities:
-            if activity.state == InstanceStatus.running or activity.state == InstanceStatus.wait    :
+            if activity.state == InstanceStatus.running or activity.state == InstanceStatus.wait:
                 curr_activity = activity
                 break
         # 如果当前状态为待领取，则领取
@@ -160,7 +162,6 @@ class Process():
         processes = cls.get_process_by_activities(activities)
         return Status.ok, u'ok', processes
 
-
     @classmethod
     def get_running_start_by(cls, user=current_user):
         """
@@ -173,8 +174,6 @@ class Process():
                                                  process_inst__in=process_inst)
         processes = cls.get_process_by_activities(activities)
         return Status.ok, u'ok', processes
-
-
 
     @classmethod
     def get_end_history(cls, user=current_user):
@@ -197,7 +196,7 @@ class Process():
         return Status.ok, u'ok', processes
 
     @classmethod
-    def update_form(cls,process_id, form):
+    def update_form(cls, process_id, form):
         process_inst = ProcessInst.objects(id=process_id)
         if process_inst is None:
             return Status.not_found, u'failed', None
@@ -255,4 +254,16 @@ class Process():
         data['curr_participants'] = UserProcedure.participants_to_users(process.curr_activity.participants)
         return Status.ok, 'ok', data
 
-
+    @classmethod
+    def get_page_config(cls, process_id):
+        process = ProcessInst.objects(id=process_id)
+        activity = process.curr_activity
+        if activity is None:
+            return Status.not_found, u'failed', None
+        activity_define_name = activity.activity_define.define_name
+        activity_status = activity.state
+        role_name = current_user.role.name
+        config = page_config.repair_page.get(activity_define_name).get(activity_status).get(role_name)
+        if config is None:
+            return Status.ok, u'ok', page_config.repair_page.get("default")
+        return Status.ok, u'ok', config

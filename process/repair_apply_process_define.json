@@ -15,7 +15,7 @@
      },
      {
        "define_name": "维修员接单",
-       "description": "维修员查看申请并接单",
+       "description": "维修员查看接单并确认故障",
        "sequence":2,
        "derect_active": false,
        "participants": {
@@ -24,19 +24,9 @@
        }
      },
      {
-       "define_name":"维修员确认故障",
-       "description":"维修员接单后到现场确认故障，编辑保修单,填写报价",
-       "sequence":3,
-       "derect_active": true,
-       "participants":{
-          "type": "front",
-          "value": "2"
-       }
-     },
-     {
        "define_name":"维修员维修并反馈，填写工时",
        "description":"维修后填写维修结果",
-       "sequence":4,
+       "sequence":3,
        "derect_active": true,
        "participants":{
           "type": "front",
@@ -46,7 +36,7 @@
      {
        "define_name":"用户确认维修结果并付款",
        "description":"",
-       "sequence":5,
+       "sequence":4,
        "derect_active": true,
        "participants":{
           "type": "front",
@@ -56,7 +46,7 @@
      {
        "define_name":"管理员确认",
        "description":"",
-       "sequence":6,
+       "sequence":5,
        "derect_active": true,
        "participants":{
           "type": "role",

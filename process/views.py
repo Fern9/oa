@@ -53,6 +53,9 @@ def get_activities():
         code, msg, data = Process.get_end_history()
     if view == 'get_running':
         code, msg, data = Process.get_running_activities()
+    if view == 'get_config':
+        process_id = request.args['process_id']
+        code, msg, data = Process.get_page_config(process_id)
     if view == 'get_process_data':
         process_id = request.args['process_id']
         code, msg, data = Process.get_process_data(process_id)
