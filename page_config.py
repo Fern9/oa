@@ -7,9 +7,9 @@ wait = InstanceStatus.wait
 running = InstanceStatus.running
 repair_page = {
     "default": {
-        "show": ["trouble_thing", "address", "phone", "description", "comment"],
-        "edit": [],
-        "required": [],
+        "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 0, "repair_count": 0},
+        "edit": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
+        "required": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
         "button": [
             {
                 "text": "确定",
@@ -17,14 +17,14 @@ repair_page = {
             }
         ]
     },
-    "发起申请": {
+    u"发起申请": {
     },
-    "维修员接单": {
+    u"维修员接单": {
         wait: {
             "repair": {
-                "show": ["trouble_thing", "address", "phone", "description", "comment"],
-                "edit": [],
-                "required": [],
+                "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 0, "repair_count": 0},
+                "edit": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
+                "required": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
                 "button": [
                     {
                         "text": "抢单",
@@ -35,9 +35,9 @@ repair_page = {
         },
         running: {
             "repair": {
-                "show": ["trouble_thing", "address", "phone", "description", "comment"],
-                "edit": ["trouble_thing", "description", "comment"],
-                "required": ["trouble_thing"],
+                "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 0, "repair_count": 0},
+                "edit": {"trouble_thing": 1, "address": 0, "phone": 0, "description": 1, "comment": 1, "repair_time": 0, "repair_count": 0},
+                "required": {"trouble_thing": 1, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
                 "button": [
                     {
                         "text": "确认并开始维修",
@@ -48,12 +48,12 @@ repair_page = {
 
         }
     },
-    "维修员维修并反馈，填写工时": {
+    u"维修员维修并反馈，填写工时": {
         running: {
             "repair": {
-                "show": ["trouble_thing", "address", "phone", "description", "comment", "repair_time", "repair_count"],
-                "edit": ["trouble_thing", "description", "comment", "repair_time", "repair_count"],
-                "required": ["repair_time"],
+                "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 1, "repair_count": 1},
+                "edit": {"trouble_thing": 1, "address": 0, "phone": 0, "description": 1, "comment": 1, "repair_time": 1, "repair_count": 1},
+                "required": {"trouble_thing": 1, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 1, "repair_count": 1},
                 "button": [
                     {
                         "text": "维修完成",
@@ -63,12 +63,12 @@ repair_page = {
             }
         }
     },
-    "用户确认维修结果并付款": {
+    u"用户确认维修结果并付款": {
         running: {
             "repair": {
-                "show": ["trouble_thing", "address", "phone", "description", "comment", "repair_count"],
-                "edit": [],
-                "required": [],
+                "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 1, "repair_count": 1},
+                "edit": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
+                "required": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
                 "button": [
                     {
                         "text": "确认完成",
@@ -83,12 +83,12 @@ repair_page = {
 
         }
     },
-    "管理员确认": {
+    u"管理员确认": {
         running: {
             "repair": {
-                "show": ["trouble_thing", "address", "phone", "description", "comment", "repair_count"],
-                "edit": [],
-                "required": [],
+                "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 1, "repair_count": 1},
+                "edit": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 1, "repair_count": 1},
+                "required": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 1, "repair_count": 1},
                 "button": [
                     {
                         "text": "确认",

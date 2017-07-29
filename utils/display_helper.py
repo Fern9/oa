@@ -2,6 +2,7 @@
 import json
 from bson import json_util
 from flask_mongoengine import BaseQuerySet
+from flask_mongoengine import Document
 
 
 class Status():
@@ -22,8 +23,22 @@ class DisplayHelper:
 
     @classmethod
     def output(cls, code=Status.ok, msg=u'', data=None, is_mongo=False):
-        if isinstance(data, BaseQuerySet) or is_mongo:
-            data = cls.mongoset_to_dict(data)
+        # if isinstance(data, BaseQuerySet) or is_mongo:
+        #     data = cls.mongoset_to_dict(data)
+        #     return json_util.dumps({
+        #         "code": code,
+        #         "msg": msg,
+        #         "data": data
+        #     })
+        if isinstance(data, (BaseQuerySet, set)):
+            data = [ob.to_mongo().to_dict() for ob in data]
+            return json_util.dumps({
+                "code": code,
+                "msg": msg,
+                "data": data
+            })
+        elif isinstance(data, Document):
+            data = data.to_mongo().to_dict()
             return json_util.dumps({
                 "code": code,
                 "msg": msg,

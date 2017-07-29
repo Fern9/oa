@@ -148,3 +148,12 @@ data:
 | action     | string | finish |
 | process_id | string | 流程id   |
 
+
+
+###订单详情页面获取页面配置数据
+
+'''
+Net.get('/process/activities?view=get_config&process_id=' + this.process_id, {}, (res) => {
+                console.log(res)
+            })
+'''

@@ -256,7 +256,7 @@ class Process():
 
     @classmethod
     def get_page_config(cls, process_id):
-        process = ProcessInst.objects(id=process_id)
+        process = ProcessInst.objects(id=process_id).first()
         activity = process.curr_activity
         if activity is None:
             return Status.not_found, u'failed', None
