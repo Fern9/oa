@@ -88,11 +88,13 @@ class Process():
         # 如果流程不处于运行状态，直接返回失败
         if process_instance.state == InstanceStatus.dead:
             return Status.failed, u'流程处于非运行状态', None
+        curr_activity = process_instance.curr_activity
         activities = ActivityInst.objects(process_inst=process_instance).all()
-        for activity in activities:
-            if activity.state == InstanceStatus.running or activity.state == InstanceStatus.wait:
-                curr_activity = activity
-                break
+        # for activity in activities:
+        #     if activity.state == InstanceStatus.running or activity.state == InstanceStatus.wait:
+        #         curr_activity = activity
+        #         break
+
         # 如果当前状态为待领取，则领取
         if curr_activity.state == InstanceStatus.wait:
             return cls.run_activity(curr_activity.id)
@@ -111,7 +113,8 @@ class Process():
                     next_activity.participants.append(next_activity.activity_define.participants)
                 elif next_activity.activity_define.participants.type == 'front':
                     front_value = next_activity.activity_define.participants.value
-                    next_activity.participants = activities[front_value - 1].participants
+                    next_activity.participants = activities[int(front_value) - 1].participants
+                    next_activity.state = InstanceStatus.wait
             else:
                 next_activity.state = InstanceStatus.wait
             # next_activity.form = curr_activity.form
@@ -126,7 +129,7 @@ class Process():
         if activity.state == InstanceStatus.wait:
             activity.state = InstanceStatus.running
             participant = Participant(type='user', value=str(user.id))
-            activity.participants.append(participant)
+            activity.participants = [participant]
         elif activity.state == InstanceStatus.block:
             activity.state = InstanceStatus.running
         else:
