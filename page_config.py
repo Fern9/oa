@@ -66,7 +66,7 @@ repair_page = {
     u"用户确认维修结果并付款": {
         running: {
             "repair": {
-                "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 1, "repair_count": 1},
+                "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 0, "repair_count": 1},
                 "edit": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
                 "required": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
                 "button": [
