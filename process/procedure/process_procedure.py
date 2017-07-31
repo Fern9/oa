@@ -263,7 +263,10 @@ class Process():
         activity_define_name = activity.activity_define.define_name
         activity_status = activity.state
         role_name = current_user.role.name
-        config = page_config.repair_page.get(activity_define_name).get(activity_status).get(role_name)
+        try:
+            config = page_config.repair_page.get(activity_define_name).get(activity_status).get(role_name)
+        except Exception:
+            return Status.ok, u'ok', page_config.repair_page.get("default")
         if config is None:
             return Status.ok, u'ok', page_config.repair_page.get("default")
         return Status.ok, u'ok', config
