@@ -13,7 +13,7 @@ repair_page = {
         "button": [
             {
                 "text": "确定",
-                "action": "none"
+                "action": "no_action"
             }
         ]
     },
@@ -27,8 +27,12 @@ repair_page = {
                 "required": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
                 "button": [
                     {
+                        "text": "保存",
+                        "action": "update"
+                    },
+                    {
                         "text": "抢单",
-                        "action": "finish"
+                        "action": "next"
                     }
                 ]
             }
@@ -40,8 +44,12 @@ repair_page = {
                 "required": {"trouble_thing": 1, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
                 "button": [
                     {
+                        "text": "保存",
+                        "action": "update"
+                    },
+                    {
                         "text": "确认并开始维修",
-                        "action": "finish"
+                        "action": "next"
                     }
                 ]
             }
@@ -56,8 +64,12 @@ repair_page = {
                 "required": {"trouble_thing": 1, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 1, "repair_count": 1},
                 "button": [
                     {
+                        "text": "保存",
+                        "action": "update"
+                    },
+                    {
                         "text": "维修完成",
-                        "action": "finish"
+                        "action": "next"
                     }
                 ]
             }
@@ -72,11 +84,11 @@ repair_page = {
                 "button": [
                     {
                         "text": "确认完成",
-                        "action": "finish"
+                        "action": "next"
                     },
                     {
                         "text": "反馈",
-                        "action": ""
+                        "action": "no_action"
                     }
                 ]
             }
@@ -92,7 +104,7 @@ repair_page = {
                 "button": [
                     {
                         "text": "确认",
-                        "action": "finish"
+                        "action": "next"
                     }
                 ]
             }
