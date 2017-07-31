@@ -28,6 +28,10 @@ def process_instance():
     elif content.get('action') == 'finish':
         process_instance_id = content.get('process_id')
         code, msg, data = Process.finish_curr_activity_start_next(process_instance_id)
+    elif content.get("action") == 'update_form':
+        form = content.get('form')
+        process_instance_id = content.get('process_id')
+        code, msg, data = Process.update_form(process_instance_id, form)
     else:
         code, msg, data = Status.failed, u'action is not found', None
     return DisplayHelper.output(code, msg, data)

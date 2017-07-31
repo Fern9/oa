@@ -32,9 +32,9 @@ class Role(db.Document):
     default = db.BooleanField()  # 是否为默认角色,默认角色为普通用户
 
 
-class Permission():
+class Permission(object):
     APPLY_REQUIRE = 1  # 申请维修
-    EDIT_REPIRE_FORM = 2  # 编辑维修单
+    EDIT_REPAIRE_FORM = 2  # 编辑维修单
     MANAGE_USER = 3  # 用户管理
     AUTH_ROLE = 4  # 更改用户角色
 
