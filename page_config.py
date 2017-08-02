@@ -27,10 +27,6 @@ repair_page = {
                 "required": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
                 "button": [
                     {
-                        "text": "保存",
-                        "action": "update"
-                    },
-                    {
                         "text": "抢单",
                         "action": "next"
                     }
@@ -77,7 +73,7 @@ repair_page = {
     },
     u"用户确认维修结果并付款": {
         running: {
-            "repair": {
+            "normal": {
                 "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 0, "repair_count": 1},
                 "edit": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
                 "required": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 0, "repair_count": 0},
@@ -97,7 +93,7 @@ repair_page = {
     },
     u"管理员确认": {
         running: {
-            "repair": {
+            "admin": {
                 "show": {"trouble_thing": 1, "address": 1, "phone": 1, "description": 1, "comment": 1, "repair_time": 1, "repair_count": 1},
                 "edit": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 1, "repair_count": 1},
                 "required": {"trouble_thing": 0, "address": 0, "phone": 0, "description": 0, "comment": 0, "repair_time": 1, "repair_count": 1},

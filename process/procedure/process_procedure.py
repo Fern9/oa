@@ -114,7 +114,7 @@ class Process():
                 elif next_activity.activity_define.participants.type == 'front':
                     front_value = next_activity.activity_define.participants.value
                     next_activity.participants = activities[int(front_value) - 1].participants
-                    next_activity.state = InstanceStatus.wait
+                    next_activity.state = InstanceStatus.running
             else:
                 next_activity.state = InstanceStatus.wait
             # next_activity.form = curr_activity.form
