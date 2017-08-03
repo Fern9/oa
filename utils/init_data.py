@@ -2,7 +2,9 @@ from process.procedure.process_procedure import Process
 from utils.data_helper import DataHelper
 from oa import app
 from models import *
+import sys
 
+sys.path.insert(0, '../')
 
 if __name__ == '__main__':
     try:
