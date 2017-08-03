@@ -32,9 +32,9 @@ class DataHelper:
         for role in Role.objects.all():
             role.delete()
         common = Role(name="normal", permission=[Permission.APPLY_REQUIRE], default=True)
-        repairer = Role(name="repair", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPIRE_FORM],
+        repairer = Role(name="repair", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPAIRE_FORM],
                         default=False)
-        admin = Role(name="admin", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPIRE_FORM,
+        admin = Role(name="admin", permission=[Permission.APPLY_REQUIRE, Permission.EDIT_REPAIRE_FORM,
                                                Permission.AUTH_ROLE,
                                                Permission.MANAGE_USER], default=False)
         common.save()

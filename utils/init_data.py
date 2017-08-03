@@ -14,7 +14,7 @@ if __name__ == '__main__':
         ActivityInst.objects().delete()
         Process.init_process_define()
         roles = Role.objects().all()
-        if roles is None:
+        if roles is None or len(roles) == 0:
             DataHelper.init_roles()
         print 'init data success'
     except Exception as e:
